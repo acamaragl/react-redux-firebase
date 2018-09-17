@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 
 import data from "./dataReducer";
-import auth from "./authReducer";
+import msgs from "./msgReducer";
+import map from "./mapReducer";
 
 export default combineReducers({
-  data,
-  auth
+  data: data,
+  msgs: msgs,
+  map: map
 });

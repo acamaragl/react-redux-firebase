@@ -1,35 +1,41 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { completeToDo } from "../actions";
+import MapList from "./MapList";
+
+
+import { completeToDo, blockBuilding, createRandomBuilding,fetchmap} from "../actions";
 
 class ToDoListItem extends Component {
-  handleCompleteClick = completeToDoId => {
-    const { completeToDo, auth } = this.props;
-    completeToDo(completeToDoId, auth.uid);
-  };
+
+  onClick() {
+    this.getMap()
+  }
+
+  onClickCreateNew(){
+    const { createRandomBuilding, value } = this.props;
+    createRandomBuilding(value)
+  }
+
+  getMap() {
+    const { value } = this.props;
+    this.props.fetchmap(value);
+  }
 
   render() {
-    const { todoId, todo } = this.props;
+    const { todoId, value } = this.props;
+    let listStyle = (this.display)? {display:this.display} : {display:'none'}
     return (
       <div key="toDoName" className="col s10 offset-s1 to-do-list-item teal">
-        <h4>
-          {todo.title}{" "}
-          <span
-            onClick={() => this.handleCompleteClick(todoId)}
-            className="complete-todo-item waves-effect waves-light teal lighten-5 teal-text text-darken-4 btn"
-          >
-            <i className="large material-icons">done</i>
-          </span>
+        <h4 >
+          <span onClick={this.onClick.bind(this)}>{todoId}  👁</span>
+          <span style={{float:'right'}} onClick={this.onClickCreateNew.bind(this)}> + </span>
         </h4>
+        <div id={"edificios_"+todoId} style={listStyle}>
+          <MapList map={'load'} id={todoId} reference={value} />
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return {
-    auth
-  };
-};
-
-export default connect(mapStateToProps, { completeToDo })(ToDoListItem);
+export default connect(null, { completeToDo, blockBuilding, createRandomBuilding,fetchmap })(ToDoListItem);
